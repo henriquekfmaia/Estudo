@@ -1,0 +1,7 @@
+03 - Resolução_semicontinua
+
+Um dos recursos do programa desenvolvido é obter o ângulo ideal dentro de um intervalo com variações discretas dos ângulos
+
+O relatório a seguir é um exemplo dessa funcionalidade
+
+Ela pode ser usada através da manipulação dos parâmetros

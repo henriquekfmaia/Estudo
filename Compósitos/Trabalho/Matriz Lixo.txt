@@ -1,0 +1,30 @@
+#def msum(A,B):
+    #try:
+        #if A.check() == True and B.check() == True and len(A.matriz) == len(B.matriz) and len(A.matriz[0]) == len(B.matriz[0]): ## Verifica se as matrizes sao do mesmo tamanho
+            #msum = [] ## Cria uma lista vazia que ira armazenar a soma, que posteriormente sera transformado na matriz resultante
+            #for line in range(0,len(A.matriz)): ## Para cada linha
+                #msum.append([]) ## Adiciona uma linha a matriz da soma
+                #for column in range(0,len(A.matriz[0])): ## Para cada linha
+                    #msum[line].append(A.matriz[line][column]+B.matriz[line][column]) ## Adiciona-se a soma dos termos de indice ij ao espaço ij da matriz resultante
+            #return Matriz(msum)  ## Retorna a matriz da soma
+    #except:
+        #pass
+
+
+
+
+#def MXM(A, B):
+    #if A.check() == True and B.check() == True:
+        #if len(A.matriz[0]) == len(B.matriz):
+            #B_trans = Matriz(B.trans())
+            #prod = []
+            #for i in range(0,len(A.matriz)):
+                #prod.append([])
+                #for j in range(0,len(B_trans.matriz)):
+                    #n = 0
+                    #for c in range(0,len(A.matriz[0])):
+                        #n = n + A.matriz[i][c]*B_trans.matriz[j][c]
+                    #prod[i].append(n)
+        #return Matriz(prod)
+    #else:
+        #pass

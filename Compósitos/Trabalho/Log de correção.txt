@@ -1,0 +1,4 @@
+unitConverter.py - Falta retornar erro em caso de unidade invalida
+Matriz.py - Falta retornar erro na matriz
+fiberLoad.py - Falta verificar formato padrão
+loadParameters.py - Traduzir nomes dos parâmetros

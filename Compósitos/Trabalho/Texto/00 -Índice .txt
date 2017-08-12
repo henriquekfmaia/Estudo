@@ -1,0 +1,23 @@
+1 - O Trabalho
+	1.1 - Relatório
+	1.2 - Matrizes T
+	1.3 - Matrizes Ql
+	1.4 - Gráfico Teta x Pmax
+	
+2 - Prefácio
+
+3 - Trabalho com resolução semicontinua
+	3.1 - Relatório
+	3.2 - Matrizes T
+	3.3 - Matrizes Ql
+	3.4 - Valores Teta x Pmax
+	3.5 - Gráfico Teta x Pmax
+
+4 - Código
+	4.1 - Programa
+	4.2 - Carrega parâmetros do problema
+	4.3 - Carrega dados da fibra
+	4.4 - Matriz
+	4.5 - Coversor de unidades
+
+		

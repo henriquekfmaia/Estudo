@@ -1,0 +1,11 @@
+d_unit = in 
+d = 12 
+Matriz = Epoxi 
+Fibra = VidroE 
+layers = 6 
+layers_thickness_unit = mm 
+layers_thickness = 0.5 
+teta_interval = discreto 
+teta_unit = graus 
+teta = 0,15,30,45,60,75,90 
+angles = 1,-1,1,1,-1,1 

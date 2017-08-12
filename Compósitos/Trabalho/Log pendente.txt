@@ -1,0 +1,19 @@
+1- Coleta de dados X
+2- Obter coordenadas z das camadas X
+3- Criar matriz Q da fibra X
+4- Criar matrizes de rotação T x
+5- Obter matrizes Q' x
+6- Obter matriz ABD x
+7- Criar função para inverter matriz x
+8- Inverter ABD e obter ABD-1 x
+9- Obter carregamento x
+10- Obter Def Cur x
+11- Obter tensões e deformações x
+12- Plotar gráfico
+13- Gerar relatório
+
+11/13
+
+
+
+

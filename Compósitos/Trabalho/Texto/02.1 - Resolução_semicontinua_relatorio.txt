@@ -1,0 +1,120 @@
+Problema proposto:
+Encontrar P máxima para diferentes ângulos teta
+Encontrar ângulo que suporta maior P máxima
+Os parâmetros fornecidos pelo problema foram:
+Diâmetro do tubo = 12 in
+Matriz = Epoxi
+Fibra = VidroE
+Número de camadas = 6
+Espessura das camadas = 0.5mm
+Angulos teta = [0 até 90] - semicontinuo com passo de 1 grau
+Arrânjo dos ângulos - [1,-1,1,1,-1,1]
+
+Os parâmetros da fibra usada são:
+E1 = 45600 
+E2 = 16200 
+G12 = 5830 
+v12 = 0.278 
+Xt = 1280 
+Xc = 800 
+Yt = 40 
+Yc = 145 
+S12 = 73 
+
+Com os parâmetros dados, pode-se calcular as alturas inicial e final de cada camada
+		Inicial		Final
+Camada 1 - 	-1.5		-1
+Camada 2 - 	-1		-0.5
+Camada 3 - 	-0.5		0
+Camada 4 - 	0		0.5
+Camada 5 - 	0.5		1
+Camada 6 - 	1		1.5
+
+Com os parâmetros da fibra, pode-se calcular a matriz Q, onde:
+Q11 = E1/(1-(v12**2)*E2/E1) 
+Q12 = v12*E2/(1-(v12**2)*E2/E1) 
+Q21 = Q12 
+Q22 = E2/(1-(v12**2)*E2/E1)
+Q33 = G12
+
+e  Q = [Q11 Q12  0 ]
+       [Q21 Q22  0 ]
+       [ 0   0  Q33]
+
+Então, as matrizes T foram obtidas e podem ser encontradas no documento em anexo
+O formato da matriz T é:
+T11 = cos(teta)^2; T12 = sin(teta)^2; T13 = 2*sin(teta)*cos(teta)
+T21 = sin(teta)^2; T22 = cos(teta)^2; T23 = -2*sin(teta)*cos(teta)
+T31 = -sin(teta)*cos(teta); T32 = sin(teta)*cos(teta); T33 = cos(teta)^2 - sin(teta)^2
+
+As matrizes Ql foram obtidas e estão em outro documento em anexo
+Ql é obtido através da equação:
+Ql(camada) = [T(teta)^-1]*[Q]*[T(teta)^-1]t
+onde [] indicam matrizes e []t indica a matriz transposta
+
+Para cada Ql podemos obter as matrizes A, B e D
+Onde 	A = somatório(Ql(camada)*(Zf-Zi)) para cada camada
+	B = somatório(Ql(camada)*(Zf^2-Zi^2)/2) para cada camada
+	D = somatório(Ql(camada)*(Zf^3-Zi^3)/3) para cada camada
+	Zf = altura final da camada e Zi = Altura inicial da camada
+
+A matriz ABD é obtida encaixando as matrizes A B e D da seguinte forma:
+	[[A] [B]]
+	[[B] [D]]
+Expandindo:
+	[ A A A B B B ]
+	[ A A A B B B ]
+	[ A A A B B B ]
+	[ B B B D D D ]
+	[ B B B D D D ]
+	[ B B B D D D ]
+
+Com essa matriz, é importante guardar também ABD^-1
+
+Com tudo isso pronto, pudemos passar para a parte de cálculo de esforços
+Primeiramente obtemos a matriz de carregamento:
+[P*d/4]
+[P*d/2]
+[  0  ] = C
+[  0  ]
+[  0  ]
+[  0  ]
+
+A matriz def_cur    = 	[e0x ] = (ABD^-1)*C
+			[e0y ]
+			[e0xy]
+			[ Kx ]
+			[ Ky ]
+			[Kxy ]
+
+Com isso, podemos calcular as tensões e deformações em cada superficie de cada camada
+[ex ]	[e0x + z*Kx ]
+[ey ] = [e0y + z*Ky ] = def_xyz
+[Yxy]	[e0xy+ z*Kxy]
+
+[e1 ]	
+[e2 ] = [[T]t^-1*[def_xyz]] = def_123
+[Y12]	
+
+[sigmax]   
+[sigmay] = [Qll*[def_xyz]] = sigma_xyz
+[tauxy ]   
+
+[sigma1]   
+[sigma2] = [Tl*[sigma_xyz]] = sigma_xyz
+[tau12 ]  
+
+Com isso, para cada ângulo, foi seguido o seguinte procedimento:
+1 - Estipular o valor P = 0
+2 - Comparar matriz sigma_xyz com os valores Xt e Yt da fibra e calcular as diferenças entre eles
+3 - Dar um passo em P proporcional a diferença entre sigma_xyz e Xt/Yt
+	De modo que P se aproxima do valor Pmax
+4 - Recalcular tensões e deformações
+5 - Voltar ao segundo passo
+
+Com isso, obtem-se os valores máximos de P para cada ângulo:
+Como foram estudados 90 ângulos, os valores foram colocados em anexo
+
+O gráfico encontra-se em anexo
+
+Com isso, conclúi-se que o ângulo que suporta maior pressão é o de 57 graus, suportando 1.887Mpa
