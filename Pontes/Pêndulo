@@ -1,0 +1,23 @@
+Pêndulo
+
+function derx1= f1(omega)
+derx1=omega;
+endfunction
+
+function derx2= f2(teta)
+derx2=-(9.81*sin(teta));
+endfunction
+
+p = 0.0001;
+w1 = 1; a1 = pi/2; W = zeros(1,2); A = zeros(1,2); w2 = 0.5; a2 = pi/2;
+for i = [1:100000]
+w = w1;
+w1 = w1 + p*f2(a1);
+a1 = a1 + p*f1(w);
+w = w2;
+w2 = w2 + p*f2(a2);
+a2 = a2 + p*f1(w);
+W(i,1) = w1; A(i,1) = a1; W(i,2) = w2; A(i,2) = a2;
+end
+
+#plot (W), ..

@@ -1,0 +1,68 @@
+# Barra delgada -- Crank Nicholson
+
+# Caracteristicas da barra
+L = 1; # Comprimento da barra
+dx = 0.1; # Passo em x
+dt = 100; # Passo de tempo --> Aumente/diminua para acelerar/desacelerar o processo (quantidade de iteracoes necessarias para chegar ao equilibrio)
+X = L/dx; #Número de nos
+a = 0.000001; # Parametro alfa
+r = a*dt/(2*dx^2);
+T = zeros(X,1);  # Matriz com a temperatura da barra todos os momentos
+
+# Condicoes de contorno
+T1 = 20; #Temperatura na extremidade da barra onde x = 0
+T2 = 40; #Temperatura na extremidade da barra onde x = L
+
+# Definir perfil inicial de temperaturas
+T(:,1) = randi(100,X,1);
+T(1,1) = T1;
+T(X,1) = T2;
+
+# A equacao que descreve a temperatura de cada no em um tempo t, sendo definida por
+# r*T(i-1) +(1-2r)T(i) +rT(i+1)     (tudo no tempo t = tempo anterior) = A_anterior*T_anterior
+# -r*T(i-1) +(1+2*r)*T(i) -r*T(i+1) (tudo no tempo t = tempo atual) = A_atual*T_atual
+# Onde r = a*dt/(2*dx^2)
+# Sera usada uma equacao da forma A_anterior*T_anterior = A_atual*T_atual para resolver o problema
+# Com isso, temos que T_atual = inversa(A_atual)*A_anterior*T_anterior
+# Para melhor visualizacao da equacao, pode-se consultar a pagina http://en.wikipedia.org/wiki/Crank%E2%80%93Nicolson_method#Example:_1D_diffusion
+A_ant = []; # Matriz A correspondente ao passo anterior
+A_atual = [] #Matriz A correspondente ao passo atual
+
+# Montando matriz A anterior
+for i = [2:X-1]
+    A_ant(i,i-1) = r;
+    A_ant(i,i) = 1 - 2*r;
+    A_ant(i,i+1) = r;
+end
+A_ant(1,1) = 1;
+A_ant(X,X) = 1;
+
+# Montando matriz A atual
+for i = [2:X-1]
+    A_atual(i,i-1) = -r;
+    A_atual(i,i) = 1 + 2*r;
+    A_atual(i,i+1) = -r;
+end
+A_atual(1,1) = 1;
+A_atual(X,X) = 1;
+
+# Agora, calculamos a matriz A = inversa(A_atual)*A_anterior
+A = inv(A_atual)*A_ant;
+
+# Resolvendo o sistema a cada momento no tempo
+erro = 1; # Igualamos erro a 1 para que a primeira iteracao do while aconteca
+t = 1; # Comecamos t como 1
+while (erro > 0.00001)  # O programa so para de recalcular a temperatura na barra quando a mesma se torna estavel
+    t = t+1; # t = t+1 --> atualiza o tempo
+    T(:,t) = A*T(:,t-1);  # Calcula o T no proximo passo de tempo
+	if (rem(t,100) == 1)  # if roda a cada 100 iteracoes (a partir de t = 101)
+	    erro = 0;         # O erro zera, pois sera calculado novamente
+	    for i = [2:X-1]
+	        erro = erro + abs(T(i,t) - T(i,t-100)); # E somado ao erro a diferenca entre T(i) atual e T(i) em 100 passos de tempo anteriores
+	    end                                         # O for vai de 2 a X-1, pois no caso estudado, T(1) e T(X) sao constantes
+	endif                                           # Caso contrario, deve-se mudar o alcance para 1:X
+end
+# "'" ao final de uma matriz retorna matriz transposta
+# Essa notacao foi escolhida pois facilita a visualizacao e otimiza o uso do espaco na saida do codigo
+'Distribuicao inicial da barra' , T(:,1)'
+'Distribuicao final da barra' , T(:,t)'

@@ -1,0 +1,24 @@
+Pêndulo Forçado sem amortecimento
+
+function derx1= f1(omega)
+derx1=omega;
+endfunction
+
+function derx2= f2(teta,tempo)
+derx2=-(9.81*sin(teta))+10*cos(1*tempo);
+endfunction
+
+w1 = 0; a1 = pi/3; W = zeros(1,4); A = zeros(1,4); w2 = 0; a2 = pi/3.01; w3 = 0; a3 = pi/2; w4 = 0; a4 = pi/2.01;
+for i = [1:100]
+p = 0.1;
+t1 = p*i;
+w1 = w1 + p*f2(a1,t1);
+a1 = a1 + p*f1(w1);
+w2 = w2 + p*f2(a2,t1);
+a2 = a2 + p*f1(w2);
+w3 = w3 + p*f2(a3,t1);
+a3 = a3 + p*f1(w3);
+w4 = w4 + p*f2(a4,t1);
+a4 = a4 + p*f1(w4);
+W(i,1) = w1; A(i,1) = a1; W(i,2) = w2; A(i,2) = a2; W(i,3) = w3; W(i,4) = w4; 
+end

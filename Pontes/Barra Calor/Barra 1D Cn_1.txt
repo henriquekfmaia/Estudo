@@ -1,0 +1,79 @@
+# Barra delgada -- Crank Nicholson
+
+L = 1; # Comprimento da barra
+dx = 0.1; # Passo em x
+dt = 0.1; # Passo de tempo
+X = L/dx; #Número de nos
+a = 0.0001; # Parametro alfa
+T = zeros(X,1);  # Matriz com a temperatura da barra todos os momentos
+T_atual = zeros(X); # Matriz com temperatura atual da barra
+T_ant = zeros(X) # Matriz com temperatura da barra na iteracao anterior
+
+# Sera usada uma equacao da forma A * T = b para resolver o problema
+
+A = []; # Matriz A
+b = []; # Matriz b
+
+Q = []; # Distribuicao de calor na fonte de calor
+
+
+T1 = 20; #Temperatura na extremidade da barra onde x = 0
+T2 = 20; #Temperatura na extremidade da barra onde x = L
+
+# Definir perfil inicial de temperaturas
+T_atual = randi(100,X,1);
+T(:,1) = T_atual;
+T(1,1) = T1;
+T(X,1) = T2;
+
+#Definir diferentes distribuicoes de fontes de calor
+
+function Q1 = q1(x)
+
+    Q1 = 1;
+
+endfunction
+
+
+function Q2 = q2(x)
+
+    Q2 = x;
+
+endfunction
+
+
+
+for i = [1:X]
+
+    Q(i,1) = q1(i);
+end
+
+# Montando matriz A
+for i = [2:X-1]
+    A(i,i-1) = -a*dt/(2*dx^2);
+    A(i,i) = 1 + a*dt/(dx^2);
+    A(i,i+1) = -a*dt/(2*dx^2);
+end
+A(1,1) = 1;
+A(X,X) = 1;
+T_atual = T;
+# Montando a matriz b
+# E resolvendo o sistema a cada momento no tempo
+for t = [2:3]
+    erro = 1;
+    while erro > 0.0005
+        T_ant = T_atual;
+        b(1,1) = T1;
+        b(X,1) = T2;
+        for i = [2,X-1]
+            b(i,1) = T_ant(i) + ((a*dt)/(2*(dx^2)))*((T_ant(i-1) - 2*T_ant(i) + T_ant(i+1))+(T_atual(i-1) - 2*T_atual(i) + T_atual(i+1))); # Crank nicholson
+        end
+        T_atual = A\b;
+        T_atual(1) = T1;
+        T_atual(X) = T2;
+        erro = 0;
+        for e = [1:X]
+           erro += abs(T_ant(e) - T_atual(e));
+        end
+    end
+end

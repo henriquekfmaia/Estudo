@@ -1,0 +1,54 @@
+# Barra delgada -- Cranck Nicholson
+
+format long
+L = 1; # Comprimento da barra
+dx = 0.1; # Passo em x
+dt = 10; # Passo de tempo
+X = L/dx; #Número de nós
+c = 0.001; #Constante alfa da equação
+A = []; # Matriz A
+b = []; # Matriz b
+Tf = []; #Matriz com os valores das temperaturas finais
+
+T_atual = [];
+T_atual = randi(100,X,1);
+T_atual(1) = 10;  #Temperatura na extremidade da barra onde x = 0
+T_atual(X) = 20;  #Temperatura na extremidade da barra onde x = L
+
+# Peguei do trabalho do Ruan
+pimprime = 10;
+deltapimp = 2;
+for u = 1:n,
+	Tf(u,1) = T(u);
+end
+
+# Montando matriz A
+for i = 2:X-1
+    A(i,i-1) = -a*dt/(2*dx^2);
+    A(i,i) = 1 + a*dt/(2*dx^2);
+    A(i,i+1) = -a*dt/(2*dx^2);
+end
+A(1,1) = 1;
+A(X,X) = 1;
+
+#Montando a matriz b
+p = mimprime - 1;
+p2 = 1;
+for y = 2:2000,
+    p = p + 1;
+    for z = 2:X-1,
+	b(i,1) = T_atual(z) + ((dt*c)/(2*(dx²)))*(T_atual(z-1) - 2*T_atual(z) + T_atual(z+1));
+	b(1,1) = T_atual(1);
+	b(X,1) = T_atual(X);
+    end
+    T_atual = A\b; #Resolução do sistema para T
+	
+	if p == mimprime,
+	    p2 = p2 + 1;
+	    for i = 1:n,
+		Tf(i,p2) = T_atual(i)
+		p = 0
+	    end
+	    mimprime = mimprime + deltamimp^(p2-1);
+	end
+end
